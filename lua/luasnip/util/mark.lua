@@ -282,9 +282,13 @@ function Mark:update(opts, pos_begin, pos_end)
 end
 
 function Mark:set_opts(opts)
+  local a, b = nil, nil
+
+  local c = vim.api.nvim_buf_line_count(0)
   local status, result = pcall(function()
     local pos_begin, pos_end = self:pos_begin_end_raw()
 
+    a, b = pos_begin, pos_end
     vim.api.nvim_buf_del_extmark(0, session.ns_id, self.id)
 
     self.opts = opts
@@ -318,6 +322,7 @@ function Mark:set_opts(opts)
         .. '  Result: %s\n'
         .. '  self.id: %s\n'
         .. '  session.ns_id: %s\n'
+        .. '  pos_begin:%s | pos_end:%s | buflinecount: %s\n'
         .. '  pos_begin,pos_end raw: %s\n'
         .. '  opts: %s\n'
         .. '  self.opts: %s'
@@ -329,6 +334,9 @@ function Mark:set_opts(opts)
       vim.inspect(result),
       tostring(self.id),
       tostring(session.ns_id),
+      a and vim.inspect(a) or 'nil',
+      b and vim.inspect(b) or 'nil',
+      c,
       vim.inspect(self:pos_begin_end_raw()),
       vim.inspect(opts),
       vim.inspect(self.opts)
