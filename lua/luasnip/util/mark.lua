@@ -31,8 +31,7 @@ end
 local function bytecol_to_utfcol(pos)
   local status, result = pcall(function()
     local lines = vim.api.nvim_buf_get_lines(0, pos[1], pos[1] + 1, false)
-    if not lines or #lines == 0 then error('No line content found') end
-    local line = lines[1]
+    local line = lines and lines[1] or ''
     local utf16_indx, _ = vim.str_utfindex(line, pos[2])
     return { pos[1], utf16_indx }
   end)
@@ -62,13 +61,18 @@ local function bytecol_to_utfcol(pos)
     error_info.filetype
   )
 
-  print('LUASNIP ERROR: ' .. error_msg)
+  print('LUASNIP ERROR: in bytecol_to_utfcol')
+  if log_file then
+    log_file:write(error_msg .. '\n')
+    log_file:flush()
+  end
 
   return pos
 end
 
 local function bytecol_to_utfcol_old(pos)
   local line = vim.api.nvim_buf_get_lines(0, pos[1], pos[1] + 1, false)
+
   -- line[1]: get_lines returns table.
   -- use utf16-index.
   local utf16_indx, _ = vim.str_utfindex(line[1] or '', pos[2])
