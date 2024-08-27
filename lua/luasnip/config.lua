@@ -36,7 +36,6 @@ local c
 
 c = {
   set_config = function(user_config)
-    print('SET_CONFIG CALLED')
     user_config = user_config or {}
     local conf = vim.deepcopy(conf_defaults)
 
