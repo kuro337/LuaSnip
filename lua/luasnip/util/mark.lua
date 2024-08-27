@@ -295,6 +295,7 @@ function Mark:set_opts(opts)
 
     --- return early here
     if not pos_begin or not pos_end then
+      error('Invalid pos_begin,pos_end')
       -- print('ERROR:Mark:set_opts returned NIL pos_begin, pos_end')
       -- if init_present then print('Initially pos_begin, pos_end is not nil') end
       return

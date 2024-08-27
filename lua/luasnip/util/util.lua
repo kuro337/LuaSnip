@@ -416,10 +416,11 @@ local function pos_cmp(pos1, pos2)
     local info = debug.getinfo(2, 'Sl')
 
     local err_msg = string.format(
-      'FATAL ERROR [util.lua:pos_cmp] Invalid position in pos_cmp.\nCall info:\n%s\npos1: %s\npos2: %s',
+      'FATAL ERROR [util.lua:pos_cmp] Invalid position in pos_cmp.\nCall info:\n%s\npos1:%s| pos2:%s | buflinecount: %s',
       vim.inspect(info),
       pos1 and vim.inspect(pos1) or 'nil',
-      pos2 and vim.inspect(pos2) or 'nil'
+      pos2 and vim.inspect(pos2) or 'nil',
+      vim.api.nvim_buf_line_count(0)
     )
     -- Log the error (you can adjust this based on your logging preferences)
 

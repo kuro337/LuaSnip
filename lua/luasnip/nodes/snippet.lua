@@ -1386,7 +1386,7 @@ end
 function Snippet:extmarks_valid()
   -- assumption: extmarks are contiguous, and all can be queried via pos_begin_end_raw.
   local ok, current_from, self_to = pcall(self.mark.pos_begin_end_raw, self.mark)
-  if not ok then return false end
+  if not ok or not current_from or not self_to then return false end
 
   -- below code does not work correctly if the snippet(Node) does not have any children.
   if #self.nodes == 0 then return true end
@@ -1397,7 +1397,15 @@ function Snippet:extmarks_valid()
     -- - we can't get the position of some node
     -- - the positions aren't contiguous or don't completely fill the parent, or
     -- - any child of this node violates these rules.
-    if not ok_ or util.pos_cmp(current_from, node_from) ~= 0 or not node:extmarks_valid() then return false end
+    if
+      not ok_
+      or not node_from
+      or not node_to
+      or util.pos_cmp(current_from, node_from) ~= 0
+      or not node:extmarks_valid()
+    then
+      return false
+    end
     current_from = node_to
   end
   if util.pos_cmp(current_from, self_to) ~= 0 then return false end
