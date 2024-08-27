@@ -2,7 +2,8 @@ local session = require('luasnip.session')
 
 local Mark = {}
 
-local log_file = io.open('/Users/kuro/.local/state/nvim/luasnip_error.log', 'w')
+local log_file, err = io.open('/Users/kuro/.local/state/nvim/luasnip_error.log', 'a')
+if not log_file then print('[LOGFILE FAILURE] Failed to open log file: ' .. (err or 'unknown error')) end
 
 function Mark:new(o)
   o = o or {}

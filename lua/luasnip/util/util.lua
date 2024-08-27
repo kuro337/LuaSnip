@@ -1,5 +1,8 @@
 local session = require('luasnip.session')
 
+local log_file, err = io.open('/Users/kuro/.local/state/nvim/luasnip_error.log', 'a')
+if not log_file then print('[LOGFILE FAILURE] Failed to open log file: ' .. (err or 'unknown error')) end
+
 local function get_cursor_0ind()
   local c = vim.api.nvim_win_get_cursor(0)
   c[1] = c[1] - 1
@@ -237,7 +240,9 @@ local function wrap_nodes(nodes)
   end
 end
 
-local function pos_equal(p1, p2) return p1[1] == p2[1] and p1[2] == p2[2] end
+local function pos_equal(p1, p2) return (p1 and p2 and p1[1] == p2[1] and p1[2] == p2[2]) or false end
+
+-- local function pos_equal(p1, p2) return p1[1] == p2[1] and p1[2] == p2[2] end
 
 local function string_wrap(lines, pos)
   local new_lines = vim.deepcopy(lines)
@@ -417,7 +422,12 @@ local function pos_cmp(pos1, pos2)
       pos2 and vim.inspect(pos2) or 'nil'
     )
     -- Log the error (you can adjust this based on your logging preferences)
-    print(err_msg)
+
+    if log_file then
+      print('FATAL CMP FAILURE')
+      log_file:write(err_msg .. '\n')
+      log_file:flush()
+    end
 
     return 0
   end
