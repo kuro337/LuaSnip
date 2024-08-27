@@ -75,6 +75,7 @@ c = {
     -- only setup using correct config
     if session.config.delete_check_events == nil then return end
 
+    -- debug source
     -- print('LuaSnip Setup called from:')
     -- print(debug.traceback('', 2)) -- This will print the call stack
 
