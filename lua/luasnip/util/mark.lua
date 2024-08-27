@@ -2,6 +2,8 @@ local session = require('luasnip.session')
 
 local Mark = {}
 
+local log_file = io.open('/Users/kuro/.local/state/nvim/luasnip_error.log', 'w')
+
 function Mark:new(o)
   o = o or {}
   setmetatable(o, self)
@@ -122,7 +124,12 @@ function Mark:pos_begin_end_raw()
       vim.api.nvim_win_get_cursor(0)[1],
       vim.bo.filetype
     )
-    print(error_msg)
+    print('ERROR IN Mark:pos_begin_end_raw')
+
+    if log_file then
+      log_file:write(error_msg .. '\n')
+      log_file:flush()
+    end
     return nil, nil
   end
 
@@ -183,7 +190,12 @@ function Mark:copy_pos_gravs(opts)
       vim.inspect(opts),
       vim.inspect(vim.api.nvim_buf_get_extmarks(0, session.ns_id, 0, -1, { details = true }))
     )
-    print(error_msg)
+    --   print(error_msg)
+    print('ERROR in Mark:copy_pos_gravs')
+    if log_file then
+      log_file:write(error_msg .. '\n')
+      log_file:flush()
+    end
 
     return nil
   end
@@ -256,7 +268,11 @@ function Mark:update(opts, pos_begin, pos_end)
       vim.inspect(pos_end),
       vim.inspect(vim.api.nvim_buf_get_extmarks(0, session.ns_id, 0, -1, { details = true }))
     )
-    print(error_msg)
+    print('ERROR IN Mark:update')
+    if log_file then
+      log_file:write(error_msg .. '\n')
+      log_file:flush()
+    end
 
     return nil
   end
@@ -316,7 +332,12 @@ function Mark:set_opts(opts)
       vim.inspect(opts),
       vim.inspect(self.opts)
     )
-    print(log_msg)
+
+    print('ERROR IN SET_OPTS')
+    if log_file then
+      log_file:write(log_msg .. '\n')
+      log_file:flush()
+    end
   end
 end
 
