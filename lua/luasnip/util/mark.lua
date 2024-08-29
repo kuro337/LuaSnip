@@ -107,7 +107,7 @@ function Mark:set_opts(opts)
   end)
 
   if not status then
-    error(result) -- Re-throw the error
+    --error(result) -- Re-throw the error
   end
 end
 
