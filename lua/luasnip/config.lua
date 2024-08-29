@@ -78,6 +78,7 @@ c = {
   end,
 
   _setup = function()
+    --
     if session.config.delete_check_events == nil then return end
 
     local augroup = vim.api.nvim_create_augroup('luasnip', {})
