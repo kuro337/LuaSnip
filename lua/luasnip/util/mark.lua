@@ -52,12 +52,26 @@ function Mark:pos_end()
   return bytecol_to_utfcol({ mark_info[3].end_row, mark_info[3].end_col })
 end
 
-function Mark:pos_begin_end_raw()
+function Mark:pos_begin_end_raw_old()
   local mark_info = vim.api.nvim_buf_get_extmark_by_id(0, session.ns_id, self.id, { details = true })
+
   return { mark_info[1], mark_info[2] }, {
     mark_info[3].end_row,
     mark_info[3].end_col,
   }
+end
+
+function Mark:pos_begin_end_raw()
+  local mark_info = vim.api.nvim_buf_get_extmark_by_id(0, session.ns_id, self.id, { details = true })
+
+  if mark_info and #mark_info >= 3 then
+    return { mark_info[1], mark_info[2] }, {
+      mark_info[3].end_row,
+      mark_info[3].end_col,
+    }
+  end
+
+  return { 0, 0 }, { 0, 0 }
 end
 
 function Mark:pos_begin_raw()
