@@ -66,8 +66,8 @@ function Mark:pos_begin_end_raw()
 
   if mark_info and #mark_info >= 3 then
     return { mark_info[1], mark_info[2] }, {
-      mark_info[3].end_row,
-      mark_info[3].end_col,
+      mark_info[3].end_row or 0,
+      mark_info[3].end_col or 0,
     }
   end
 
